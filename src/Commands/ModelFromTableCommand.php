@@ -198,7 +198,8 @@ class ModelFromTableCommand extends Command
         $this->fieldsCast = '';
         foreach ($modelInformation['fillable'] as $field) {
             // fillable and hidden
-            if ($field != 'id') {
+            $ignore_columns = ['id', 'created_at', 'updated_at'];
+            if (in_array($field, $ignore_columns) == false) {
                 $this->fieldsFillable .= (strlen($this->fieldsFillable) > 0 ? ', ' : '')."'$field'";
 
                 $fieldsFiltered = $this->columns->where('field', $field);
@@ -220,7 +221,7 @@ class ModelFromTableCommand extends Command
                     }
                 }
             } else {
-                if ($field != 'id' && $field != 'created_at' && $field != 'updated_at') {
+                if (in_array($field, $ignore_columns) == false) {
                     $this->fieldsHidden .= (strlen($this->fieldsHidden) > 0 ? ', ' : '')."'$field'";
                 }
             }
